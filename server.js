@@ -126,3 +126,24 @@ app.get('*', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`🚀 EduVision AI running on http://localhost:${PORT}`));
+
+// New Commit
+// New Student Registration Route
+app.post('/api/students/register', async (req, res) => {
+  try {
+    const { name, rollNumber, gradeClass, parentPhone, faceData } = req.body;
+    
+    const student = await prisma.student.create({
+      data: {
+        name,
+        rollNumber,
+        gradeClass,
+        parentPhone
+      }
+    });
+
+    res.status(201).json({ success: true, student });
+  } catch (err) {
+    res.status(400).json({ error: 'Roll Number already exists or invalid data!' });
+  }
+});
