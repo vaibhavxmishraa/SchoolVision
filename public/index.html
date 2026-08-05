@@ -190,17 +190,32 @@
         let capturedDescriptor = null;
         let modelsLoaded = false;
 
-        async function loadAIModels() {
-            const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
-            await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-            await faceapi.nets.faceLandmark64Net.loadFromUri(MODEL_URL);
-            await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-            
-            modelsLoaded = true;
-            document.getElementById('ai-status-text').innerText = "AI Neural Models Loaded Successfully! Ready for Face Recognition.";
-            document.getElementById('ai-loading-banner').className = "mb-6 p-3 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between";
-        }
-        loadAIModels();
+        // Reliable CDN Models URL with Error Catching
+async function loadAIModels() {
+    const statusText = document.getElementById('ai-status-text');
+    try {
+        // Fast & Reliable Model Weight URL
+        const MODEL_URL = 'https://cdn.jsdelivr.net/gh/cbrandolino/face-api.js@master/weights/';
+        
+        statusText.innerText = "Downloading AI Detector Model... (1/3)";
+        await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+        
+        statusText.innerText = "Downloading AI Landmark Model... (2/3)";
+        await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+        
+        statusText.innerText = "Downloading Face Recognition Model... (3/3)";
+        await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+        
+        modelsLoaded = true;
+        statusText.innerText = "AI Neural Models Loaded Successfully! System Ready.";
+        document.getElementById('ai-loading-banner').className = "mb-6 p-3 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between";
+    } catch (err) {
+        console.error("AI Model Loading Error:", err);
+        statusText.innerText = "❌ AI Models Load Nahi Ho Paye! Internet Check Karein ya Page Refresh Karein.";
+        document.getElementById('ai-loading-banner').className = "mb-6 p-3 rounded-xl bg-rose-600/20 border border-rose-500/40 text-rose-300 text-xs flex items-center justify-between";
+    }
+}
+loadAIModels();
 
         function switchTab(tab) {
             document.getElementById('landing-tab').classList.toggle('hidden', tab !== 'landing');
