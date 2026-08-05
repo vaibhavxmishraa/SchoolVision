@@ -1,1 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
 
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Student {
+  id          String          @id @default(uuid())
+  rollNumber  String          @unique
+  name        String
+  gradeClass  String
+  parentPhone String
+  createdAt   DateTime        @default(now())
+  attendance  AttendanceLog[]
+}
+
+model Camera {
+  id        String          @id @default(uuid())
+  camCode   String          @unique
+  location  String
+  logs      AttendanceLog[]
+}
+
+model AttendanceLog {
+  id              String   @id @default(uuid())
+  studentId       String
+  cameraId        String
+  timestamp       DateTime @default(now())
+  confidenceScore Float
+  status          String   // PRESENT, LATE, ABSENT
+  smsSent         Boolean  @default(true)
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  camera  Camera  @relation(fields: [cameraId], references: [id], onDelete: Cascade)
+}
