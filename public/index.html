@@ -190,12 +190,11 @@
         let capturedDescriptor = null;
         let modelsLoaded = false;
 
-        // Reliable CDN Models URL with Error Catching
 async function loadAIModels() {
     const statusText = document.getElementById('ai-status-text');
     try {
-        // Fast & Reliable Model Weight URL
-        const MODEL_URL = 'https://cdn.jsdelivr.net/gh/cbrandolino/face-api.js@master/weights/';
+        // Official and most stable Face-API Models URL
+        const MODEL_URL = 'https://justadudewhohacks.github.io/face-api.js/models';
         
         statusText.innerText = "Downloading AI Detector Model... (1/3)";
         await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
@@ -211,7 +210,7 @@ async function loadAIModels() {
         document.getElementById('ai-loading-banner').className = "mb-6 p-3 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between";
     } catch (err) {
         console.error("AI Model Loading Error:", err);
-        statusText.innerText = "❌ AI Models Load Nahi Ho Paye! Internet Check Karein ya Page Refresh Karein.";
+        statusText.innerText = "❌ Models Load Nahi Hue. Browser Console (F12) Check Karein.";
         document.getElementById('ai-loading-banner').className = "mb-6 p-3 rounded-xl bg-rose-600/20 border border-rose-500/40 text-rose-300 text-xs flex items-center justify-between";
     }
 }
