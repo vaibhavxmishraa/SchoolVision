@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduvisionAI — Teacher</title><link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="toast-area"></div>
+<div class="layout">
+  <div class="sidebar">
+    <div class="brand">🎓 EduvisionAI<small>Teacher Panel</small></div>
+    <div class="nav-item active" onclick="switchSection('roster',this);loadRoster()">📋 <span>Class Sheet</span></div>
+    <div class="nav-item" onclick="switchSection('logs',this);loadLogs()">🕓 <span>Attendance Logs</span></div>
+    <div class="nav-item" onclick="logout()">🚪 <span>Logout</span></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><h2>Classroom Attendance</h2>
+      <div class="user-chip">🧑‍🏫 <span id="uname"></span></div></div>
+
+    <div id="roster" class="section active">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <h3>📋 Today's Class Sheet</h3>
+          <button class="btn btn-sm btn-green" onclick="exportClass()">⬇ Export Excel</button>
+        </div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:14px">
+          CCTV fail ho to yahan se manually mark/override kar sakte hain.</p>
+        <table><thead><tr><th>Roll</th><th>Name</th><th>Class</th>
+          <th>Morning Check-In</th><th>Evening Check-Out</th><th>Manual Action</th></tr></thead>
+        <tbody id="rosterRows"></tbody></table>
+      </div>
+    </div>
+
+    <div id="logs" class="section">
+      <div class="panel"><h3>🕓 Recent Attendance Logs</h3>
+        <table><thead><tr><th>Date</th><th>Time</th><th>Roll</th><th>Student</th>
+          <th>Session</th><th>Status</th><th>Marked By</th></tr></thead>
+        <tbody id="logRows"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/common.js"></script>
+<script src="js/teacher.js"></script>
+</body>
+</html>

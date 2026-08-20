@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduvisionAI — Admin</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="toast-area"></div>
+<div class="layout">
+  <div class="sidebar">
+    <div class="brand">🎓 EduvisionAI<small>Admin Panel · Tensor Titans</small></div>
+    <div class="nav-item active" onclick="switchSection('dash',this)">📊 <span>Dashboard</span></div>
+    <div class="nav-item" onclick="switchSection('live',this);startCam()">📹 <span>Live CCTV</span></div>
+    <div class="nav-item" onclick="switchSection('students',this);loadStudents()">🧑‍🎓 <span>Students</span></div>
+    <div class="nav-item" onclick="switchSection('teachers',this);loadTeachers()">🧑‍🏫 <span>Teachers</span></div>
+    <div class="nav-item" onclick="switchSection('parents',this);loadParents()">👨‍👩‍👧 <span>Parents</span></div>
+    <div class="nav-item" onclick="logout()">🚪 <span>Logout</span></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><h2 id="pageTitle">Dashboard</h2>
+      <div class="user-chip">👑 <span id="uname"></span></div></div>
+
+    <!-- DASHBOARD -->
+    <div id="dash" class="section active">
+      <div class="cards" id="statCards"></div>
+      <div class="panel"><h3>📥 Reports</h3>
+        <button class="btn btn-sm btn-green" onclick="exportExcel()">⬇ Export Full Attendance (Excel)</button>
+      </div>
+    </div>
+
+    <!-- LIVE CCTV -->
+    <div id="live" class="section">
+      <div class="panel"><h3>📹 Live CCTV Face Recognition</h3>
+        <div class="camera-box">
+          <div>
+            <video id="video" autoplay muted playsinline></video>
+            <canvas id="snap" class="snap-canvas" style="display:none"></canvas>
+            <div style="margin-top:12px">
+              <button class="btn btn-sm btn-green" id="scanBtn" onclick="toggleScan()">▶ Start Auto-Scan</button>
+              <button class="btn btn-sm" onclick="scanOnce()">📸 Scan Now</button>
+            </div>
+          </div>
+          <div class="cam-side">
+            <h3>🟢 Recognition Log</h3>
+            <div class="status-log" id="camLog"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENTS -->
+    <div id="students" class="section">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>🧑‍🎓 Students</h3>
+          <button class="btn btn-sm" onclick="openStudentModal()">+ Add Student</button>
+        </div>
+        <table><thead><tr><th>Roll</th><th>Name</th><th>Class</th><th>Parent</th><th>Face Samples</th><th></th></tr></thead>
+        <tbody id="studentRows"></tbody></table>
+      </div>
+    </div>
+
+    <!-- TEACHERS -->
+    <div id="teachers" class="section">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>🧑‍🏫 Teachers</h3><button class="btn btn-sm" onclick="openTeacherModal()">+ Add Teacher</button>
+        </div>
+        <table><thead><tr><th>Name</th><th>Username</th><th>Phone</th></tr></thead>
+        <tbody id="teacherRows"></tbody></table>
+      </div>
+    </div>
+
+    <!-- PARENTS -->
+    <div id="parents" class="section">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>👨‍👩‍👧 Parents</h3><button class="btn btn-sm" onclick="openParentModal()">+ Add Parent</button>
+        </div>
+        <table><thead><tr><th>Name</th><th>Username</th><th>Phone</th></tr></thead>
+        <tbody id="parentRows"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STUDENT MODAL -->
+<div class="modal-bg" id="studentModal">
+  <div class="modal">
+    <h3>Add New Student</h3>
+    <input id="s_name" placeholder="Full Name">
+    <div class="row-2"><input id="s_roll" placeholder="Roll Number">
+      <input id="s_class" placeholder="Class (e.g. 5-A)"></div>
+    <select id="s_parent"></select>
+    <h3 style="font-size:15px;margin-top:16px">📸 Face Enrollment (Webcam)</h3>
+    <video id="enrollVid" autoplay muted playsinline style="width:100%;border-radius:10px"></video>
+    <div class="thumbs" id="faceThumbs"></div>
+    <button class="btn btn-sm btn-green" onclick="capFace()">📸 Snap Face</button>
+    <div style="margin-top:18px;display:flex;gap:10px">
+      <button class="btn" onclick="saveStudent()">Save Student</button>
+      <button class="btn btn-red" onclick="closeStudentModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEACHER MODAL -->
+<div class="modal-bg" id="teacherModal"><div class="modal"><h3>Add Teacher</h3>
+  <input id="t_name" placeholder="Full Name"><input id="t_user" placeholder="Username">
+  <input id="t_pass" placeholder="Password"><input id="t_phone" placeholder="Phone (+91...)">
+  <div style="margin-top:14px;display:flex;gap:10px"><button class="btn" onclick="saveTeacher()">Save</button>
+  <button class="btn btn-red" onclick="document.getElementById('teacherModal').classList.remove('show')">Cancel</button></div>
+</div></div>
+
+<!-- PARENT MODAL -->
+<div class="modal-bg" id="parentModal"><div class="modal"><h3>Add Parent</h3>
+  <input id="p_name" placeholder="Full Name"><input id="p_user" placeholder="Username">
+  <input id="p_pass" placeholder="Password"><input id="p_phone" placeholder="Phone (+91...)">
+  <div style="margin-top:14px;display:flex;gap:10px"><button class="btn" onclick="saveParent()">Save</button>
+  <button class="btn btn-red" onclick="document.getElementById('parentModal').classList.remove('show')">Cancel</button></div>
+</div></div>
+
+<script src="js/common.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

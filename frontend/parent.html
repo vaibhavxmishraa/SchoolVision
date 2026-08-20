@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduvisionAI — Parent</title><link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="toast-area"></div>
+<div class="layout">
+  <div class="sidebar">
+    <div class="brand">🎓 EduvisionAI<small>Parent Portal</small></div>
+    <div class="nav-item active" onclick="switchSection('home',this);loadChildren()">🏠 <span>My Children</span></div>
+    <div class="nav-item" onclick="switchSection('notif',this);loadNotifs()">🔔 <span>Notifications</span></div>
+    <div class="nav-item" onclick="logout()">🚪 <span>Logout</span></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><h2>Parent Dashboard</h2>
+      <div class="user-chip">👨‍👩‍👧 <span id="uname"></span></div></div>
+
+    <div id="home" class="section active">
+      <div class="cards" id="childCards"></div>
+      <div class="panel"><h3>📅 Attendance Timeline</h3>
+        <select id="childSelect" onchange="loadTimeline()"></select>
+        <div id="timeline" style="margin-top:16px"></div>
+      </div>
+    </div>
+
+    <div id="notif" class="section">
+      <div class="panel"><h3>🔔 Real-Time Notifications</h3>
+        <div id="notifList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/common.js"></script>
+<script src="js/parent.js"></script>
+</body>
+</html>
